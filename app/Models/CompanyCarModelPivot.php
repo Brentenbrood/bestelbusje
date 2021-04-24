@@ -37,18 +37,21 @@ class CompanyCarModelPivot extends Pivot
     public function getTotalCosts($km, $days) {
         $response = [];
 
+        // Round to nearest 50km
         $nearest_km = round($km / 50) * 50;
         if($nearest_km == 0)
             $nearest_km = 50;
 
         $whole_days = (int) $days;
 
+        // Check for half days
         if($days-$whole_days == 0.5){
             $response['total_costs_days'] = $this->costs_half_day;
         } else {
             $response['total_costs_days'] = 0;
         }
 
+        // Build response
         $response['total_costs_per_km'] = round((float)$this->costs_km,2);
         $response['total_costs_distance'] = round($this->costs_km * $nearest_km,2);
         $response['total_costs_days'] = round(($this->costs_day * (int)$days) + $response['total_costs_days'],2);

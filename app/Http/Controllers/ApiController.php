@@ -14,11 +14,16 @@ class ApiController extends Controller
 
     public function showTotalCosts(Request $request)
     {
+        // Get request parameters
         $response = [];
         $km = $request->query('km');
         $days = $request->query('days');
         $volume = $request->query('volume');
 
+        if(is_null($volume))
+            $volume = 0;
+
+        // Build Response
         foreach(CarModel::where('volume', '>=', $volume)->with('companies')->has('companies')->get() as $car){
             $item = [];
             $item['car']['model'] = $car->model;
